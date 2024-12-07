@@ -1,101 +1,265 @@
-import Image from "next/image";
-
+"use client";
+import { ChevronDown, RotateCcw, Search, SquareCheckBig } from "lucide-react";
+import { useState } from "react";
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <header className="py-8 bg-white shadow-sm">
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl font-bold text-center text-gray-800">
+            My API library 📚
+          </h1>
+        </div>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <main className="flex-grow container mx-auto px-4 py-12">
+        <div className="max-w-2xl mx-auto space-y-6">
+          <GithubUserAPI />
+          <DontSwearAPI />
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="py-6 bg-white border-t border-gray-200">
+        <div className="container mx-auto px-4 text-center text-gray-600">
+          <p>&copy; 2023 My API Library. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );
 }
+
+const GithubUserAPI = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const [contributions, setContributions] = useState<any>(null);
+
+  const fetchUserInfo = async () => {
+    try {
+      const response = await fetch(`https://api.github.com/users/${username}`);
+      const data = await response.json();
+      setUserInfo(data);
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      setUserInfo(null);
+    }
+  };
+
+  const fetchContributions = async () => {
+    const query = `{
+      user(login: "${username}") {
+        contributionsCollection {
+          contributionCalendar {
+            totalContributions
+            weeks {
+              contributionDays {
+                contributionCount
+                weekday
+                date
+              }
+            }
+          }
+        }
+      }
+    }`;
+
+    try {
+      const response = await fetch("https://api.github.com/graphql", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
+      });
+      const data = await response.json();
+      setContributions(
+        data.data.user.contributionsCollection.contributionCalendar
+      );
+    } catch (error) {
+      console.error("Error fetching user contributions:", error);
+      setContributions(null);
+    }
+  };
+
+  const handleSearch = () => {
+    Promise.all([fetchUserInfo(), fetchContributions()]);
+  };
+
+  const refreshUserInfo = () => {
+    setUsername("");
+    setUserInfo(null);
+    setContributions(null);
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out">
+      <div
+        className="p-6 cursor-pointer flex justify-between items-center"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="bg-gray-700 border-gray-300 border text-center p-2 text-white rounded-lg font-bold">
+          GET
+        </div>
+        <h3 className="text-xl font-medium text-gray-800">GitHub User API</h3>
+        <ChevronDown
+          className={`text-gray-400 transform transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </div>
+      <div
+        className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-96 pb-6" : "max-h-0"
+        }`}
+      >
+        <p className="text-gray-600 mb-4">
+          Enter a GitHub username to fetch user information and {' '}
+          <span className="line-through">display user contributions.</span>
+        </p>
+        <div className="flex space-x-2 mb-4">
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter GitHub username"
+            className="flex-grow px-3 py-2 border border-gray-300 rounded-md"
+          />
+          <button
+            onClick={handleSearch}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          >
+            <Search />
+          </button>
+          <button
+            onClick={refreshUserInfo}
+            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+          >
+            <RotateCcw />
+          </button>
+        </div>
+        <div
+          className={`border-2 border-dashed border-gray-300 text-gray-300 rounded-md p-4 ${
+            userInfo ? "hidden" : "block"
+          }`}
+        >
+          This is where the user info will appear
+        </div>
+        {userInfo && (
+          <div className="border border-gray-300 rounded-md p-4">
+            <img
+              src={userInfo.avatar_url}
+              alt={userInfo.name}
+              className="w-16 h-16 rounded-full mb-2"
+            />
+            <h4 className="font-bold">{userInfo.name}</h4>
+            <p className="text-gray-600">{userInfo.bio}</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Followers: {userInfo.followers} | Following: {userInfo.following}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const DontSwearAPI = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageResponse, setMessageResponse] = useState(null);
+
+  const refreshMessage = () => {
+    setMessage("");
+    setMessageResponse(null);
+  };
+
+  const fetchMessageResponse = async () => {
+    const response = await fetch(
+      "https://dont-swear-api.dont-swear-api.workers.dev",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: `${message}` }),
+      }
+    );
+    const data = await response.json();
+    setMessageResponse(data);
+    // console.log(data)
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out">
+      <div
+        className="p-6 cursor-pointer flex justify-between items-center"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="bg-gray-700 border-gray-300 border text-center p-2 text-white rounded-lg font-bold">
+          POST
+        </div>
+        <h3 className="text-xl font-medium text-gray-800">Don't Swear API</h3>
+        <ChevronDown
+          className={`text-gray-400 transform transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </div>
+      <div
+        className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-96 pb-6" : "max-h-0"
+        }`}
+      >
+        <p className="text-gray-600 mb-4">
+          Enter a message to check if it contains swear words.
+        </p>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Enter your message here"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md mb-4"
+          rows={3}
+        />
+        <div className="flex space-x-2 mb-4">
+          <button
+            onClick={fetchMessageResponse}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          >
+            <SquareCheckBig />
+          </button>
+          <button
+            onClick={refreshMessage}
+            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+          >
+            <RotateCcw />
+          </button>
+        </div>
+        <div
+          className={`border-2 border-dashed border-gray-300 text-gray-300 rounded-md p-4 ${
+            messageResponse ? "hidden" : "block"
+          }`}
+        >
+          This is where the check will take place.
+        </div>
+        {messageResponse ? (
+          <div className="border border-gray-300 rounded-md p-4 place-content-center">
+            {messageResponse &&
+              Object.entries(messageResponse).map(([key, value]) => (
+                <h4
+                  className={`font-bold mb-2 text-center ${
+                    String(value).startsWith("error") ? "text-red-600" : ""
+                  }`}
+                  key={key}
+                >
+                  {key}: {String(value)}
+                </h4>
+              ))}
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
+    </div>
+  );
+};
