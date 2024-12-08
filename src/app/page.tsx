@@ -28,11 +28,19 @@ export default function Home() {
   );
 }
 
+interface UserInfoTypes {
+  name: string;
+  bio: string;
+  avatar_url: string;
+  followers: number;
+  following: number;
+}
+
 const GithubUserAPI = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
-  const [userInfo, setUserInfo] = useState<any>(null);
-  const [contributions, setContributions] = useState<any>(null);
+  const [userInfo, setUserInfo] = useState<UserInfoTypes | null>(null);
+  // const [contributions, setContributions] = useState<any>(null);
 
   const fetchUserInfo = async () => {
     try {
@@ -45,51 +53,51 @@ const GithubUserAPI = () => {
     }
   };
 
-  const fetchContributions = async () => {
-    const query = `{
-      user(login: "${username}") {
-        contributionsCollection {
-          contributionCalendar {
-            totalContributions
-            weeks {
-              contributionDays {
-                contributionCount
-                weekday
-                date
-              }
-            }
-          }
-        }
-      }
-    }`;
+  // const fetchContributions = async () => {
+  //   const query = `{
+  //     user(login: "${username}") {
+  //       contributionsCollection {
+  //         contributionCalendar {
+  //           totalContributions
+  //           weeks {
+  //             contributionDays {
+  //               contributionCount
+  //               weekday
+  //               date
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }`;
 
-    try {
-      const response = await fetch("https://api.github.com/graphql", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query }),
-      });
-      const data = await response.json();
-      setContributions(
-        data.data.user.contributionsCollection.contributionCalendar
-      );
-    } catch (error) {
-      console.error("Error fetching user contributions:", error);
-      setContributions(null);
-    }
-  };
+  //   try {
+  //     const response = await fetch("https://api.github.com/graphql", {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ query }),
+  //     });
+  //     const data = await response.json();
+  //     setContributions(
+  //       data.data.user.contributionsCollection.contributionCalendar
+  //     );
+  //   } catch (error) {
+  //     console.error("Error fetching user contributions:", error);
+  //     setContributions(null);
+  //   }
+  // };
 
-  const handleSearch = () => {
-    Promise.all([fetchUserInfo(), fetchContributions()]);
-  };
+  // const handleSearch = () => {
+  //   Promise.all([fetchUserInfo(), fetchContributions()]);
+  // };
 
   const refreshUserInfo = () => {
     setUsername("");
     setUserInfo(null);
-    setContributions(null);
+    // setContributions(null);
   };
 
   return (
@@ -126,7 +134,7 @@ const GithubUserAPI = () => {
             className="flex-grow px-3 py-2 border border-gray-300 rounded-md"
           />
           <button
-            onClick={handleSearch}
+            onClick={fetchUserInfo}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
           >
             <Search />
@@ -199,7 +207,7 @@ const DontSwearAPI = () => {
         <div className="bg-gray-700 border-gray-300 border text-center p-2 text-white rounded-lg font-bold">
           POST
         </div>
-        <h3 className="text-xl font-medium text-gray-800">Don't Swear API</h3>
+        <h3 className="text-xl font-medium text-gray-800">Don&apos;t Swear API</h3>
         <ChevronDown
           className={`text-gray-400 transform transition-transform ${
             isOpen ? "rotate-180" : ""

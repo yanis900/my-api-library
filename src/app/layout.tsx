@@ -13,7 +13,7 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export const metadat: Metadata = {
+export const metadata: Metadata = {
   title: 'My API Library',
   description: 'A collection of powerful API development tools',
 }
