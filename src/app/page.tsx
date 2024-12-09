@@ -122,7 +122,7 @@ const GithubUserAPI = () => {
         }`}
       >
         <p className="text-gray-600 mb-4">
-          Enter a GitHub username to fetch user information and {' '}
+          Enter a GitHub username to fetch user information and{" "}
           <span className="line-through">display user contributions.</span>
         </p>
         <div className="flex space-x-2 mb-4">
@@ -148,7 +148,7 @@ const GithubUserAPI = () => {
         </div>
         <div
           className={`border-2 border-dashed border-gray-300 text-gray-300 rounded-md p-4 ${
-            userInfo ? "hidden" : "block"
+            userInfo ? "hidden" : "flex items-center justify-center"
           }`}
         >
           This is where the user info will appear
@@ -165,6 +165,7 @@ const GithubUserAPI = () => {
             <p className="text-sm text-gray-500 mt-2">
               Followers: {userInfo.followers} | Following: {userInfo.following}
             </p>
+            {/* <a href={`https://${username}.github.io/`}>github pages</a> */}
           </div>
         )}
       </div>
@@ -207,7 +208,9 @@ const DontSwearAPI = () => {
         <div className="bg-gray-700 border-gray-300 border text-center p-2 text-white rounded-lg font-bold">
           POST
         </div>
-        <h3 className="text-xl font-medium text-gray-800">Don&apos;t Swear API</h3>
+        <h3 className="text-xl font-medium text-gray-800">
+          Don&apos;t Swear API
+        </h3>
         <ChevronDown
           className={`text-gray-400 transform transition-transform ${
             isOpen ? "rotate-180" : ""
@@ -229,7 +232,7 @@ const DontSwearAPI = () => {
           className="w-full px-3 py-2 border border-gray-300 rounded-md mb-4"
           rows={3}
         />
-        <div className="flex space-x-2 mb-4">
+        <div className="flex space-x-2 mb-4 justify-end">
           <button
             onClick={fetchMessageResponse}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
@@ -245,7 +248,7 @@ const DontSwearAPI = () => {
         </div>
         <div
           className={`border-2 border-dashed border-gray-300 text-gray-300 rounded-md p-4 ${
-            messageResponse ? "hidden" : "block"
+            messageResponse ? "hidden" : "flex items-center justify-center"
           }`}
         >
           This is where the check will take place.
