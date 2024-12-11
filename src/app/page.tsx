@@ -106,7 +106,7 @@ const GithubUserAPI = () => {
         className="p-6 cursor-pointer flex justify-between items-center"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="bg-gray-700 border-gray-300 border text-center p-2 text-white rounded-lg font-bold">
+        <div className="border-gray-700 border-dashed border-2 text-center p-2 rounded-lg font-bold">
           GET
         </div>
         <h3 className="text-xl font-medium text-gray-800">GitHub User API</h3>
@@ -205,7 +205,7 @@ const DontSwearAPI = () => {
         className="p-6 cursor-pointer flex justify-between items-center"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="bg-gray-700 border-gray-300 border text-center p-2 text-white rounded-lg font-bold">
+        <div className="border-gray-700 border-dashed border-2 text-center p-2 rounded-lg font-bold">
           POST
         </div>
         <h3 className="text-xl font-medium text-gray-800">
