@@ -82,7 +82,7 @@ export const GithubApi = () => {
           GET
         </div>
         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-          GitHub User API
+          GitHub API
         </h3>
         {/* <div
             className="border-gray-200 border-2 bg  rounded-full lg:w-10 lg:h-10 w-8 h-8 flex justify-center items-center overflow-hidden"
