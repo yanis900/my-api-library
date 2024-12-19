@@ -1,7 +1,7 @@
 "use client";
 
 import { DontSwearApi } from "@/components/DontSwearApi";
-import { GithubApi } from "@/components/githubApi";
+import { GithubApi } from "@/components/GithubApi";
 import { ReadmeApi } from "@/components/ReadmeApi";
 
 export default function Home() {
