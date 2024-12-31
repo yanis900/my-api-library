@@ -46,11 +46,14 @@ export const DontSwearApi = () => {
           >
             <img src="./icons/hono.svg" alt="icon5" className="p-2 rounded-lg" />
           </div> */}
-        <ChevronDown
-          className={`text-gray-400 transform transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
+        <div className="flex gap-2">
+          <button className="text-green-500 font-extrabold">⦿ active</button>
+          <ChevronDown
+            className={`text-gray-400 transform transition-transform ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
+        </div>
       </div>
       <div
         className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${

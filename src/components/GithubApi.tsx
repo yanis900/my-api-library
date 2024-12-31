@@ -10,14 +10,16 @@ interface UserInfoTypes {
 }
 
 export const GithubApi = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [username, setUsername] = useState("");
   const [userInfo, setUserInfo] = useState<UserInfoTypes | null>(null);
   // const [contributions, setContributions] = useState<any>(null);
 
   const fetchUserInfo = async () => {
     try {
-      const response = await fetch(`https://github-api.yanait.workers.dev/github/${username}`);
+      const response = await fetch(
+        `https://github-api.yanait.workers.dev/github/${username}`
+      );
       const data = await response.json();
       setUserInfo(data);
     } catch (error) {
@@ -96,11 +98,14 @@ export const GithubApi = () => {
               className="p-2 rounded-lg"
             />
           </div> */}
-        <ChevronDown
-          className={`text-gray-400 transform transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
+        <div className="flex gap-2">
+          <button className="text-green-500 font-extrabold">⦿ active</button>
+          <ChevronDown
+            className={`text-gray-400 transform transition-transform ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
+        </div>
       </div>
       <div
         className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${
@@ -108,8 +113,8 @@ export const GithubApi = () => {
         }`}
       >
         <p className="text-gray-600 mb-4">
-          Enter a GitHub username to fetch user information and{" "}
-          <span className="line-through">display user contributions.</span>
+          Enter a GitHub username to fetch user information{" "}
+          <span className="line-through">and display user contributions.</span>
         </p>
         <div className="flex space-x-2 mb-4">
           <input

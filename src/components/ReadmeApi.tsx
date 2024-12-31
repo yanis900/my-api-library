@@ -1,4 +1,4 @@
-import { Loader, RotateCcw, SquareCheckBig } from "lucide-react";
+import { Loader, RotateCcw, SquareCheckBig, X } from "lucide-react";
 import { useState } from "react";
 
 export const ReadmeApi = () => {
@@ -42,12 +42,14 @@ export const ReadmeApi = () => {
             }}
           >
             <img src="./icons/hono.svg" alt="icon5" className="p-2 rounded-lg" />
-          </div> */}
-        <Loader
-          className={`text-gray-400 transform transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
+            </div> */}
+        <div className="flex gap-2">
+          <button className="text-red-500 font-extrabold">⦿ inactive</button>
+
+          <X
+            className={`text-gray-400`}
+          />
+        </div>
       </div>
       <div
         className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${
