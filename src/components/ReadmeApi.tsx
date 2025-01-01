@@ -1,4 +1,4 @@
-import { Loader, RotateCcw, SquareCheckBig, X } from "lucide-react";
+import { RotateCcw, SquareCheckBig, X } from "lucide-react";
 import { useState } from "react";
 
 export const ReadmeApi = () => {
