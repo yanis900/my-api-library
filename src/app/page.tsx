@@ -17,7 +17,9 @@ export default function Home() {
           <GithubApi />
           <DontSwearApi />
           <ReadmeApi />
-          <div className="flex gap-2 items-center justify-center">More on the way... <Loader /> </div>
+          <div className="flex gap-2 items-center justify-center">
+            More on the way... <Loader />{" "}
+          </div>
         </div>
       </main>
 

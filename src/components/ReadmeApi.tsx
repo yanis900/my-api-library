@@ -1,33 +1,65 @@
-import { RotateCcw, SquareCheckBig, X } from "lucide-react";
+import { ChevronDown, RotateCcw, SquareCheckBig } from "lucide-react";
 import { useState } from "react";
 
 export const ReadmeApi = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [file, setFile] = useState("");
-  const [newFile, setNewFile] = useState(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [newFile, setNewFile] = useState<string | null>(null);
 
   const refreshMessage = () => {
-    setFile("");
+    setFiles([]);
     setNewFile(null);
   };
 
-  const fetchMessageResponse = async () => {
-    const response = await fetch("https://readme-ai.yanait.workers.dev/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ content: file }),
-    });
-    const data = await response.json();
-    setNewFile(data);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = Array.from(e.target.files || []);
+    const filteredFiles = fileList.filter((file) =>
+      file.webkitRelativePath.startsWith("src/")
+    );
+
+    if (filteredFiles.length === 0) {
+      alert("Please select a src folder from a project");
+      setFiles([]);
+    } else {
+      setFiles(filteredFiles);
+    }
+
+    console.log(
+      filteredFiles.map((file) => console.log(file.webkitRelativePath))
+    );
+  };
+
+  const readFiles = async () => {
+    try {
+      const response = await fetch("/api/read-files", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          files: files.map((file) => ({
+            webkitRelativePath: file.webkitRelativePath,
+          })),
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Unknown error occurred");
+      }
+
+      const data = await response.json();
+      setNewFile(data.content);
+    } catch (error) {
+      console.error("Error reading files:", error);
+    }
   };
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out">
       <div
         className="p-6 cursor-pointer flex justify-between items-center"
-        onClick={() => setIsOpen(false)}
+        onClick={() => setIsOpen(!isOpen)}
       >
         <div className="border-gray-700 border-dashed border-2 text-center p-2 rounded-lg font-bold">
           POST
@@ -35,19 +67,12 @@ export const ReadmeApi = () => {
         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
           Readme API
         </h3>
-        {/* <div
-            className="border-gray-200 border-2 bg  rounded-full lg:w-10 lg:h-10 w-8 h-8 flex justify-center items-center overflow-hidden"
-            style={{
-              transform: "translateX(-5px)",
-            }}
-          >
-            <img src="./icons/hono.svg" alt="icon5" className="p-2 rounded-lg" />
-            </div> */}
         <div className="flex gap-2">
-          <button className="text-red-500 font-extrabold">⦿ inactive</button>
-
-          <X
-            className={`text-gray-400`}
+          <button className="text-green-500 font-extrabold">⦿ active</button>
+          <ChevronDown
+            className={`text-gray-400 transform transition-transform ${
+              isOpen ? "rotate-180" : ""
+            }`}
           />
         </div>
       </div>
@@ -60,14 +85,15 @@ export const ReadmeApi = () => {
           Drag and drop or select the /src directory of your project
         </p>
         <input
-          value={file}
-          onChange={(e) => setFile(e.target.value)}
+          onChange={handleChange}
           type="file"
+          // @ts-ignore
+          webkitdirectory="true"
           className="w-full px-3 py-2 border border-gray-300 rounded-md mb-4"
         />
         <div className="flex space-x-2 mb-4 justify-end">
           <button
-            onClick={fetchMessageResponse}
+            onClick={readFiles}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
           >
             <SquareCheckBig />
@@ -79,30 +105,15 @@ export const ReadmeApi = () => {
             <RotateCcw />
           </button>
         </div>
-        <div
-          className={`border-2 border-dashed border-gray-300 text-gray-300 rounded-md p-4 ${
-            newFile ? "hidden" : "flex items-center justify-center"
-          }`}
-        >
-          ReadMe file will be created here.
-        </div>
-        {/* {messageResponse ? (
-            <div className="border border-gray-300 rounded-md p-4 place-content-center">
-              {messageResponse &&
-                Object.entries(messageResponse).map(([key, value]) => (
-                  <h4
-                    className={`font-bold mb-2 text-center ${
-                      String(value).startsWith("error") ? "text-red-600" : ""
-                    }`}
-                    key={key}
-                  >
-                    {key}: {String(value)}
-                  </h4>
-                ))}
-            </div>
-          ) : (
-            ""
-          )} */}
+        {newFile ? (
+          <div className="border border-gray-300 rounded-md p-4">
+            <pre>{newFile}</pre>
+          </div>
+        ) : (
+          <div className="border-2 border-dashed border-gray-300 text-gray-300 rounded-md p-4">
+            ReadMe file will be created here.
+          </div>
+        )}
       </div>
     </div>
   );
