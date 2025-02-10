@@ -147,12 +147,13 @@ export const ReadmeApi = () => {
         }`}
       >
         <p className="text-gray-600 mb-4">
-          Drag and drop or select the /src directory of your project
+          Drag and drop or select the /src directory of your project to recieve
+          a readme file based on your project code.
         </p>
         <input
           onChange={handleChange}
           type="file"
-          // @ts-expect-error
+          // @ts-expect-error Webkit-specific attribute for directory selection
           webkitdirectory="true"
           className="w-full px-3 py-2 border border-gray-300 rounded-md mb-4"
         />
@@ -192,7 +193,7 @@ export const ReadmeApi = () => {
             </div>
           ) : (
             <div className="border-2 border-dashed border-gray-300 text-gray-300 rounded-md p-4">
-              ReadMe file will be created here.
+              Readme file will be created here.
             </div>
           )}
         </div>

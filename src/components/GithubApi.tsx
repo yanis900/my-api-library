@@ -64,12 +64,12 @@ export const GithubApi = () => {
   //   }
   // };
 
-  const handleSearch = () => {
-    Promise.all([
-      fetchUserInfo(),
-      // fetchContributions()
-    ]);
-  };
+  // const handleSearch = () => {
+  //   Promise.all([
+  //     fetchUserInfo(),
+  //     fetchContributions()
+  //   ]);
+  // };
 
   const refreshUserInfo = () => {
     setUsername("");
@@ -159,7 +159,14 @@ export const GithubApi = () => {
             <p className="text-sm text-gray-500 mt-2">
               Followers: {userInfo.followers} | Following: {userInfo.following}
             </p>
-            {/* <a href={`https://${username}.github.io/`}>github pages</a> */}
+            <a
+              href={`https://${username}.github.io/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:text-blue-600 text-sm"
+            >
+              {username}.github.io
+            </a>
           </div>
         )}
       </div>
