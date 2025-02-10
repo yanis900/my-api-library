@@ -1,18 +1,13 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { files }: { files: { webkitRelativePath: string }[] } = body;
+    const { files }: { files: { name: string; content: string }[] } = body;
 
     let fileContent = "";
-
     for (const file of files) {
-      const fullPath = path.join(process.cwd(), file.webkitRelativePath);
-      const data = await fs.promises.readFile(fullPath, "utf8");
-      fileContent += data + "\n";
+      fileContent += `\n\n==> ${file.name}\n${file.content}`;
     }
 
     return NextResponse.json({ content: fileContent }, { status: 200 });

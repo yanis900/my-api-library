@@ -13,7 +13,7 @@ export const GithubApi = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [username, setUsername] = useState("");
   const [userInfo, setUserInfo] = useState<UserInfoTypes | null>(null);
-  // const [contributions, setContributions] = useState<any>(null);
+  const [contributions, setContributions] = useState<any>(null);
 
   const fetchUserInfo = async () => {
     try {
@@ -27,55 +27,55 @@ export const GithubApi = () => {
       setUserInfo(null);
     }
   };
-  // const fetchContributions = async () => {
-  //   const query = `{
-  //     user(login: "${username}") {
-  //       contributionsCollection {
-  //         contributionCalendar {
-  //           totalContributions
-  //           weeks {
-  //             contributionDays {
-  //               contributionCount
-  //               weekday
-  //               date
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }`;
+  const fetchContributions = async () => {
+    const query = `{
+      user(login: "${username}") {
+        contributionsCollection {
+          contributionCalendar {
+            totalContributions
+            weeks {
+              contributionDays {
+                contributionCount
+                weekday
+                date
+              }
+            }
+          }
+        }
+      }
+    }`;
 
-  //   try {
-  //     const response = await fetch("https://api.github.com/graphql", {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ query }),
-  //     });
-  //     const data = await response.json();
-  //     setContributions(
-  //       data.data.user.contributionsCollection.contributionCalendar
-  //     );
-  //   } catch (error) {
-  //     console.error("Error fetching user contributions:", error);
-  //     setContributions(null);
-  //   }
-  // };
+    try {
+      const response = await fetch("https://api.github.com/graphql", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
+      });
+      const data = await response.json();
+      setContributions(
+        data.data.user.contributionsCollection.contributionCalendar
+      );
+    } catch (error) {
+      console.error("Error fetching user contributions:", error);
+      setContributions(null);
+    }
+  };
 
-  // const handleSearch = () => {
-  //   Promise.all([fetchUserInfo(), fetchContributions()]);
-  // };
+  const handleSearch = () => {
+    Promise.all([fetchUserInfo(), fetchContributions()]);
+  };
 
   const refreshUserInfo = () => {
     setUsername("");
     setUserInfo(null);
-    // setContributions(null);
+    setContributions(null);
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out">
+    <div className="bg-white rounded-lg shadow-md hover:shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out">
       <div
         className="p-6 cursor-pointer flex justify-between items-center"
         onClick={() => setIsOpen(!isOpen)}
@@ -113,8 +113,8 @@ export const GithubApi = () => {
         }`}
       >
         <p className="text-gray-600 mb-4">
-          Enter a GitHub username to fetch user information{" "}
-          <span className="line-through">and display user contributions.</span>
+          Enter a GitHub username to fetch user information.{" "}
+          {/* <span className="line-through">and display user contributions.</span> */}
         </p>
         <div className="flex space-x-2 mb-4">
           <input

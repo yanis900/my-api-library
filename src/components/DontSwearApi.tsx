@@ -27,7 +27,7 @@ export const DontSwearApi = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out">
+    <div className="bg-white rounded-lg shadow-md hover:shadow-lg border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out">
       <div
         className="p-6 cursor-pointer flex justify-between items-center"
         onClick={() => setIsOpen(!isOpen)}
