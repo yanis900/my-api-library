@@ -13,7 +13,7 @@ export const GithubApi = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [username, setUsername] = useState("");
   const [userInfo, setUserInfo] = useState<UserInfoTypes | null>(null);
-  const [contributions, setContributions] = useState<any>(null);
+  // const [contributions, setContributions] = useState<any>(null);
 
   const fetchUserInfo = async () => {
     try {
@@ -27,51 +27,54 @@ export const GithubApi = () => {
       setUserInfo(null);
     }
   };
-  const fetchContributions = async () => {
-    const query = `{
-      user(login: "${username}") {
-        contributionsCollection {
-          contributionCalendar {
-            totalContributions
-            weeks {
-              contributionDays {
-                contributionCount
-                weekday
-                date
-              }
-            }
-          }
-        }
-      }
-    }`;
+  // const fetchContributions = async () => {
+  //   const query = `{
+  //     user(login: "${username}") {
+  //       contributionsCollection {
+  //         contributionCalendar {
+  //           totalContributions
+  //           weeks {
+  //             contributionDays {
+  //               contributionCount
+  //               weekday
+  //               date
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }`;
 
-    try {
-      const response = await fetch("https://api.github.com/graphql", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query }),
-      });
-      const data = await response.json();
-      setContributions(
-        data.data.user.contributionsCollection.contributionCalendar
-      );
-    } catch (error) {
-      console.error("Error fetching user contributions:", error);
-      setContributions(null);
-    }
-  };
+  //   try {
+  //     const response = await fetch("https://api.github.com/graphql", {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ query }),
+  //     });
+  //     const data = await response.json();
+  //     setContributions(
+  //       data.data.user.contributionsCollection.contributionCalendar
+  //     );
+  //   } catch (error) {
+  //     console.error("Error fetching user contributions:", error);
+  //     setContributions(null);
+  //   }
+  // };
 
   const handleSearch = () => {
-    Promise.all([fetchUserInfo(), fetchContributions()]);
+    Promise.all([
+      fetchUserInfo(),
+      // fetchContributions()
+    ]);
   };
 
   const refreshUserInfo = () => {
     setUsername("");
     setUserInfo(null);
-    setContributions(null);
+    // setContributions(null);
   };
 
   return (

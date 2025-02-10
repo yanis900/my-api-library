@@ -152,7 +152,7 @@ export const ReadmeApi = () => {
         <input
           onChange={handleChange}
           type="file"
-          // @ts-ignore
+          // @ts-expect-error
           webkitdirectory="true"
           className="w-full px-3 py-2 border border-gray-300 rounded-md mb-4"
         />
